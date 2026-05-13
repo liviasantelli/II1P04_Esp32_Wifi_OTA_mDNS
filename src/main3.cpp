@@ -47,11 +47,11 @@ void loop() {
     if (t > 2 * M_PI) t = 0;        // reinicia o ciclo a cada 2π
   }
 
-  static float t = 0.0f;      // variável de tempo para a reta
+  static float tReta = 0.0f;      // variável de tempo para a reta
   static uint32_t lastRetry2 = 0;
   if (millis() - lastRetry2 > 200) {
     lastRetry2 = millis();
-    wserial::plot("reta",10*t);
-    t += 0.2f;                      // incrementa o tempo (ajuste a velocidade)
+    wserial::plot("reta",10*tReta);
+    tReta += 0.2f;                      // incrementa o tempo (ajuste a velocidade)
   }
 }

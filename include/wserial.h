@@ -52,7 +52,7 @@ namespace wserial {
       uint16_t port;
 
       if(!parseHostPort(s,cmd,host,port)) { 
-        on_input(std::string(s.c_str()));
+        if (on_input) on_input(std::string(s.c_str()));
         return;
       }
 
@@ -92,7 +92,8 @@ namespace wserial {
   void setup(unsigned long baudrate = BAUD_RATE, uint16_t port=47268) {
     using namespace detail;
     Serial.begin(baudrate);
-    while (!Serial)
+    uint32_t serialStart = millis();
+    while (!Serial && millis() - serialStart < 2000)
       delay(1);
 
     listenPort = port;
@@ -121,7 +122,7 @@ namespace wserial {
     }
     if(Serial.available()){
       String linha = Serial.readStringUntil('\n'); // Lê até '\n'
-      on_input(linha.c_str());
+      if (on_input) on_input(linha.c_str());
     }
   }
   void onInputReceived(std::function<void(std::string)> callback) { detail::on_input = callback; }
